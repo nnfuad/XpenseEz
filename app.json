@@ -1,17 +1,19 @@
 {
   "expo": {
-    "name": ".temp",
-    "slug": ".temp",
+    "name": "XpenseEz",
+    "slug": "xpenseez",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.nnfuad.xpenseez"
     },
     "android": {
+      "package": "com.nnfuad.xpenseez",
       "adaptiveIcon": {
-        "backgroundColor": "#E6F4FE",
+        "backgroundColor": "#121212",
         "foregroundImage": "./assets/android-icon-foreground.png",
         "backgroundImage": "./assets/android-icon-background.png",
         "monochromeImage": "./assets/android-icon-monochrome.png"

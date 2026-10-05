@@ -3,22 +3,29 @@
 ## What is XpenseEz?
 XpenseEz is a slick, scalable, and intuitive finance management application built for Android. It allows users to track their daily income and expenses seamlessly. With a focus on data visualization and dataset generation, XpenseEz helps users understand their spending habits through interactive charts while securely logging analytical data for deeper insights.
 
-## How to Download it on Mobile from GitHub
-*Note: Once the final APK is compiled via EAS (Expo Application Services), it will be available in the GitHub Releases section of this repository.*
+## How to Download and Install on Mobile
+You can install XpenseEz directly on your Android device without needing to build it yourself!
 
-To test and run it immediately on your mobile device:
-1. Download the **Expo Go** app from the Google Play Store on your Android device.
-2. Clone this repository to your computer:
+1. Open your mobile web browser and navigate to this repository's [**Releases**](https://github.com/nnfuad/XpenseEz/releases) page.
+2. Click on the latest release.
+3. Under the **Assets** section, tap on `app-release.apk` to download it.
+4. Once downloaded, open the file to install it. *(Note: Your phone might ask for permission to "Install unknown apps" from your browser. Simply go to settings and toggle 'Allow from this source'.)*
+
+### For Developers (Run Locally)
+If you want to edit or test the app yourself:
+1. Clone this repository:
    ```bash
    git clone https://github.com/nnfuad/XpenseEz.git
    cd XpenseEz
    ```
-3. Install dependencies and start the development server:
+2. Install dependencies:
    ```bash
    npm install
+   ```
+3. Run the development server and test using the Expo Go app:
+   ```bash
    npm run start
    ```
-4. Scan the QR code displayed in your terminal using the Expo Go app.
 
 ## Architecture
 - **Frontend Framework**: React Native (via Expo) - Ensures a highly customizable UI and optimized APK generation.
