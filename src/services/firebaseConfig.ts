@@ -1,27 +1,22 @@
 import { initializeApp, getApps, getApp } from 'firebase/app';
 import { getFirestore } from 'firebase/firestore';
-import { getAnalytics, isSupported } from 'firebase/analytics';
+import { initializeAuth, getReactNativePersistence } from 'firebase/auth';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
-// TODO: Replace with your actual Firebase config
 const firebaseConfig = {
-  apiKey: "API_KEY",
-  authDomain: "PROJECT_ID.firebaseapp.com",
-  projectId: "PROJECT_ID",
-  storageBucket: "PROJECT_ID.appspot.com",
-  messagingSenderId: "SENDER_ID",
-  appId: "APP_ID",
-  measurementId: "G-MEASUREMENT_ID"
+  apiKey: "AIzaSyBkm4KmCdpDINq4jxNLT9r1zUvm1m0SHwA",
+  authDomain: "xpenseez.firebaseapp.com",
+  projectId: "xpenseez",
+  storageBucket: "xpenseez.firebasestorage.app",
+  messagingSenderId: "621086149431",
+  appId: "1:621086149431:web:cd6f5980533f867e70e8b2",
+  measurementId: "G-7TMXW0ZCJM"
 };
 
 // Initialize Firebase only if it hasn't been initialized already
 const app = getApps().length === 0 ? initializeApp(firebaseConfig) : getApp();
 
 export const db = getFirestore(app);
-
-// Initialize Analytics selectively based on platform support
-export let analytics: any = null;
-isSupported().then((supported) => {
-  if (supported) {
-    analytics = getAnalytics(app);
-  }
+export const auth = initializeAuth(app, {
+  persistence: getReactNativePersistence(AsyncStorage)
 });
