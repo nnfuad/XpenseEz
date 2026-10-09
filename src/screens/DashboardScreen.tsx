@@ -1,7 +1,11 @@
 import React from 'react';
-import { View, Text, StyleSheet, Dimensions, ScrollView } from 'react-native';
+import { View, Text, StyleSheet, Dimensions, ScrollView, Image } from 'react-native';
 import { PieChart, LineChart } from 'react-native-chart-kit';
 import { useStore } from '../store/useStore';
+import { useTheme } from '../hooks/useTheme';
+
+import { signOut } from 'firebase/auth';
+import { auth } from '../services/firebaseConfig';
 
 const screenWidth = Dimensions.get('window').width;
 
@@ -54,41 +58,61 @@ export const DashboardScreen = () => {
     legend: ['Monthly Spending'],
   };
 
-  return (
-    <ScrollView style={styles.container}>
-      <Text style={styles.header}>Overview</Text>
+  const { colors, isDark } = useTheme();
 
-      <View style={styles.summaryCards}>
-        <View style={styles.card}>
-          <Text style={styles.cardTitle}>Income</Text>
-          <Text style={[styles.cardAmount, { color: '#4caf50' }]}>${totalIncome.toFixed(2)}</Text>
-        </View>
-        <View style={styles.card}>
-          <Text style={styles.cardTitle}>Expense</Text>
-          <Text style={[styles.cardAmount, { color: '#f44336' }]}>${totalExpense.toFixed(2)}</Text>
+  return (
+    <ScrollView style={[styles.container, { backgroundColor: colors.background }]}>
+      <View style={styles.headerContainer}>
+        <View style={styles.headerLeft}>
+          <Image 
+            source={isDark ? require('../../assets/logo-dark.png') : require('../../assets/logo-light.png')} 
+            style={styles.logo} 
+          />
+          <Text style={[styles.header, { color: colors.text }]}>Overview</Text>
         </View>
       </View>
 
-      <View style={styles.chartContainer}>
-        <Text style={styles.chartTitle}>Spending Trends</Text>
+      <View style={styles.summaryCards}>
+        <View style={[styles.card, { backgroundColor: colors.card }]}>
+          <Text style={[styles.cardTitle, { color: colors.textSecondary }]}>Income</Text>
+          <Text style={[styles.cardAmount, { color: colors.income }]}>${totalIncome.toFixed(2)}</Text>
+        </View>
+        <View style={[styles.card, { backgroundColor: colors.card }]}>
+          <Text style={[styles.cardTitle, { color: colors.textSecondary }]}>Expense</Text>
+          <Text style={[styles.cardAmount, { color: colors.expense }]}>${totalExpense.toFixed(2)}</Text>
+        </View>
+      </View>
+
+      <View style={[styles.chartContainer, { backgroundColor: colors.card }]}>
+        <Text style={[styles.chartTitle, { color: colors.text }]}>Spending Trends</Text>
         <LineChart
           data={lineData}
           width={screenWidth - 32}
           height={220}
-          chartConfig={chartConfig}
+          chartConfig={{
+            ...chartConfig,
+            backgroundGradientFrom: colors.card,
+            backgroundGradientTo: colors.card,
+            color: (opacity = 1) => colors.primary,
+            labelColor: (opacity = 1) => colors.textSecondary,
+          }}
           bezier
           style={styles.chartStyle}
         />
       </View>
 
       {pieData.length > 0 && (
-        <View style={styles.chartContainer}>
-          <Text style={styles.chartTitle}>Expenses by Category</Text>
+        <View style={[styles.chartContainer, { backgroundColor: colors.card }]}>
+          <Text style={[styles.chartTitle, { color: colors.text }]}>Expenses by Category</Text>
           <PieChart
             data={pieData}
             width={screenWidth - 32}
             height={220}
-            chartConfig={chartConfig}
+            chartConfig={{
+              ...chartConfig,
+              color: (opacity = 1) => colors.primary,
+              labelColor: (opacity = 1) => colors.textSecondary,
+            }}
             accessor={"population"}
             backgroundColor={"transparent"}
             paddingLeft={"15"}
@@ -99,7 +123,7 @@ export const DashboardScreen = () => {
 
       {pieData.length === 0 && (
         <View style={styles.emptyContainer}>
-          <Text style={styles.emptyText}>Add some expenses to see charts!</Text>
+          <Text style={[styles.emptyText, { color: colors.textSecondary }]}>Add some expenses to see charts!</Text>
         </View>
       )}
     </ScrollView>
@@ -112,11 +136,32 @@ const styles = StyleSheet.create({
     backgroundColor: '#121212',
     padding: 16,
   },
+  headerContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: 20,
+    marginTop: 10,
+  },
+  headerLeft: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  logo: {
+    width: 40,
+    height: 40,
+    marginRight: 10,
+    borderRadius: 8,
+  },
   header: {
     fontSize: 28,
     fontWeight: 'bold',
     color: '#ffffff',
-    marginBottom: 20,
+  },
+  logoutText: {
+    color: '#f44336',
+    fontSize: 16,
+    fontWeight: 'bold',
   },
   summaryCards: {
     flexDirection: 'row',

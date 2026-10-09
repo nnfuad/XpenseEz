@@ -1,15 +1,18 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, StyleSheet, Alert, ActivityIndicator } from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, StyleSheet, Alert, ActivityIndicator, Image } from 'react-native';
 import { createUserWithEmailAndPassword } from 'firebase/auth';
 import { auth } from '../services/firebaseConfig';
 import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+
+import { useTheme } from '../hooks/useTheme';
 
 export const SignUpScreen = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
   const navigation = useNavigation<NativeStackNavigationProp<any>>();
+  const { colors, isDark } = useTheme();
 
   const handleSignUp = async () => {
     if (!email || !password) {
@@ -27,26 +30,31 @@ export const SignUpScreen = () => {
   };
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>Create Account</Text>
+    <View style={[styles.container, { backgroundColor: colors.background }]}>
+      <View style={styles.logoContainer}>
+        <Image 
+          source={isDark ? require('../../assets/logo-dark.png') : require('../../assets/logo-light.png')} 
+          style={styles.logo} 
+        />
+      </View>
       <TextInput
-        style={styles.input}
+        style={[styles.input, { backgroundColor: colors.card, color: colors.text }]}
         placeholder="Email"
-        placeholderTextColor="#888"
+        placeholderTextColor={colors.textSecondary}
         value={email}
         onChangeText={setEmail}
         autoCapitalize="none"
         keyboardType="email-address"
       />
       <TextInput
-        style={styles.input}
+        style={[styles.input, { backgroundColor: colors.card, color: colors.text }]}
         placeholder="Password"
-        placeholderTextColor="#888"
+        placeholderTextColor={colors.textSecondary}
         value={password}
         onChangeText={setPassword}
         secureTextEntry
       />
-      <TouchableOpacity style={styles.button} onPress={handleSignUp} disabled={loading}>
+      <TouchableOpacity style={[styles.button, { backgroundColor: colors.primary }]} onPress={handleSignUp} disabled={loading}>
         {loading ? (
           <ActivityIndicator color="#fff" />
         ) : (
@@ -55,7 +63,7 @@ export const SignUpScreen = () => {
       </TouchableOpacity>
       
       <TouchableOpacity style={styles.linkButton} onPress={() => navigation.navigate('Login')}>
-        <Text style={styles.linkText}>Already have an account? Login</Text>
+        <Text style={[styles.linkText, { color: colors.primary }]}>Already have an account? Login</Text>
       </TouchableOpacity>
     </View>
   );
@@ -68,12 +76,14 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     backgroundColor: '#121212',
   },
-  title: {
-    fontSize: 28,
-    fontWeight: 'bold',
-    color: '#fff',
+  logoContainer: {
+    alignItems: 'center',
     marginBottom: 40,
-    textAlign: 'center',
+  },
+  logo: {
+    width: 120,
+    height: 120,
+    borderRadius: 20,
   },
   input: {
     backgroundColor: '#1e1e1e',

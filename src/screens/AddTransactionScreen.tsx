@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { View, Text, StyleSheet, TextInput, TouchableOpacity, KeyboardAvoidingView, Platform, Alert } from 'react-native';
 import { useStore, Transaction } from '../store/useStore';
+import { useTheme } from '../hooks/useTheme';
 import { analytics } from '../services/firebaseConfig';
 import { logEvent } from 'firebase/analytics';
 
@@ -51,22 +52,24 @@ export const AddTransactionScreen = ({ navigation }: any) => {
     navigation.navigate('Dashboard');
   };
 
+  const { colors } = useTheme();
+
   return (
     <KeyboardAvoidingView 
-      style={styles.container} 
+      style={[styles.container, { backgroundColor: colors.background }]} 
       behavior={Platform.OS === 'ios' ? 'padding' : undefined}
     >
-      <Text style={styles.title}>New Transaction</Text>
+      <Text style={[styles.title, { color: colors.text }]}>New Transaction</Text>
 
-      <View style={styles.toggleContainer}>
+      <View style={[styles.toggleContainer, { backgroundColor: colors.card }]}>
         <TouchableOpacity 
-          style={[styles.toggleBtn, type === 'expense' && styles.toggleActiveExpense]}
+          style={[styles.toggleBtn, type === 'expense' && { backgroundColor: colors.expense }]}
           onPress={() => setType('expense')}
         >
           <Text style={styles.toggleText}>Expense</Text>
         </TouchableOpacity>
         <TouchableOpacity 
-          style={[styles.toggleBtn, type === 'income' && styles.toggleActiveIncome]}
+          style={[styles.toggleBtn, type === 'income' && { backgroundColor: colors.income }]}
           onPress={() => setType('income')}
         >
           <Text style={styles.toggleText}>Income</Text>
@@ -74,31 +77,31 @@ export const AddTransactionScreen = ({ navigation }: any) => {
       </View>
 
       <TextInput
-        style={styles.input}
+        style={[styles.input, { backgroundColor: colors.card, color: colors.text }]}
         placeholder="Amount (e.g. 50)"
-        placeholderTextColor="#888"
+        placeholderTextColor={colors.textSecondary}
         keyboardType="numeric"
         value={amount}
         onChangeText={setAmount}
       />
       
       <TextInput
-        style={styles.input}
+        style={[styles.input, { backgroundColor: colors.card, color: colors.text }]}
         placeholder="Category (e.g. Food, Salary)"
-        placeholderTextColor="#888"
+        placeholderTextColor={colors.textSecondary}
         value={category}
         onChangeText={setCategory}
       />
 
       <TextInput
-        style={styles.input}
+        style={[styles.input, { backgroundColor: colors.card, color: colors.text }]}
         placeholder="Description (Optional)"
-        placeholderTextColor="#888"
+        placeholderTextColor={colors.textSecondary}
         value={description}
         onChangeText={setDescription}
       />
 
-      <TouchableOpacity style={styles.saveBtn} onPress={handleSave}>
+      <TouchableOpacity style={[styles.saveBtn, { backgroundColor: colors.primary }]} onPress={handleSave}>
         <Text style={styles.saveBtnText}>Save Transaction</Text>
       </TouchableOpacity>
     </KeyboardAvoidingView>
