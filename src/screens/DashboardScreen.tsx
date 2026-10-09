@@ -48,28 +48,51 @@ export const DashboardScreen = () => {
   const [timeRange, setTimeRange] = React.useState<'Year' | 'Month' | 'Day'>('Month');
 
   // Generate line chart data based on timeRange
+  // Generate line chart data based on timeRange
   const generateLineData = () => {
-    // This is a simplified logic to show the concept. In a real app, 
-    // you'd group the `transactions` array by date.
+    let labels: string[] = [];
+    let data: number[] = [];
+    const now = new Date();
+
     if (timeRange === 'Year') {
-      return {
-        labels: ['Jan', 'Mar', 'May', 'Jul', 'Sep', 'Nov'],
-        datasets: [{ data: [120, 200, 150, 300, 250, totalExpense > 0 ? totalExpense : 100], strokeWidth: 2 }],
-        legend: ['Yearly Spending']
-      };
+      labels = ['J', 'F', 'M', 'A', 'M', 'J', 'J', 'A', 'S', 'O', 'N', 'D'];
+      data = new Array(12).fill(0);
+      expenses.forEach(t => {
+        const d = new Date(t.date);
+        if (d.getFullYear() === now.getFullYear()) {
+          data[d.getMonth()] += t.amount;
+        }
+      });
     } else if (timeRange === 'Month') {
-      return {
-        labels: ['Week 1', 'Week 2', 'Week 3', 'Week 4'],
-        datasets: [{ data: [50, 90, 40, totalExpense > 0 ? totalExpense : 70], strokeWidth: 2 }],
-        legend: ['Monthly Spending']
-      };
-    } else {
-      return {
-        labels: ['Morning', 'Noon', 'Evening', 'Night'],
-        datasets: [{ data: [10, 25, 15, totalExpense > 0 ? totalExpense : 5], strokeWidth: 2 }],
-        legend: ['Daily Spending']
-      };
+      labels = ['W1', 'W2', 'W3', 'W4', 'W5'];
+      data = new Array(5).fill(0);
+      expenses.forEach(t => {
+        const d = new Date(t.date);
+        if (d.getFullYear() === now.getFullYear() && d.getMonth() === now.getMonth()) {
+          const week = Math.min(Math.floor((d.getDate() - 1) / 7), 4);
+          data[week] += t.amount;
+        }
+      });
+    } else { // 'Day'
+      labels = ['12a', '6a', '12p', '6p'];
+      data = new Array(4).fill(0);
+      expenses.forEach(t => {
+        const d = new Date(t.date);
+        if (d.getFullYear() === now.getFullYear() && d.getMonth() === now.getMonth() && d.getDate() === now.getDate()) {
+          const block = Math.floor(d.getHours() / 6);
+          data[block] += t.amount;
+        }
+      });
     }
+
+    if (data.every(val => val === 0)) {
+      data[0] = 0; // ensure at least some data exists for rendering without errors
+    }
+
+    return {
+      labels,
+      datasets: [{ data, strokeWidth: 2 }],
+    };
   };
 
   const lineData = generateLineData();
@@ -97,6 +120,13 @@ export const DashboardScreen = () => {
           <Text style={[styles.cardTitle, { color: colors.textSecondary }]}>Expense</Text>
           <Text style={[styles.cardAmount, { color: colors.expense }]}>${totalExpense.toFixed(2)}</Text>
         </View>
+      </View>
+
+      <View style={[styles.netGrowthCard, { backgroundColor: colors.card }]}>
+        <Text style={[styles.cardTitle, { color: colors.textSecondary }]}>Net Growth</Text>
+        <Text style={[styles.cardAmount, { color: (totalIncome - totalExpense) >= 0 ? colors.income : colors.error }]}>
+          ${(totalIncome - totalExpense).toFixed(2)}
+        </Text>
       </View>
 
       <View style={[styles.chartContainer, { backgroundColor: colors.card }]}>
@@ -227,6 +257,18 @@ const styles = StyleSheet.create({
   cardAmount: {
     fontSize: 22,
     fontWeight: 'bold',
+  },
+  netGrowthCard: {
+    backgroundColor: '#1e1e1e',
+    borderRadius: 12,
+    padding: 16,
+    alignItems: 'center',
+    marginBottom: 24,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.3,
+    shadowRadius: 4,
+    elevation: 5,
   },
   chartContainer: {
     backgroundColor: '#1e1e1e',
