@@ -88,6 +88,8 @@ export const SettingsScreen = () => {
           source={themeMode === 'light' || (themeMode === 'system' && colors.background === '#f5f5f5') ? require('../../assets/logo-light.png') : require('../../assets/logo-dark.png')} 
           style={styles.logo} 
         />
+        <Text style={[styles.title, { marginTop: 15, marginBottom: 5 }]}>Profile</Text>
+        <Text style={{ color: colors.textSecondary, fontSize: 16 }}>{auth.currentUser?.email}</Text>
       </View>
       <View style={styles.section}>
         <Text style={styles.sectionTitle}>Theme Settings</Text>

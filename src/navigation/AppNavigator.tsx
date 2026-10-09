@@ -34,8 +34,8 @@ const MainTabs = () => {
             iconName = focused ? 'pie-chart' : 'pie-chart-outline';
           } else if (route.name === 'Add Expense') {
             iconName = focused ? 'add-circle' : 'add-circle-outline';
-          } else if (route.name === 'Settings') {
-            iconName = focused ? 'settings' : 'settings-outline';
+          } else if (route.name === 'Profile') {
+            iconName = focused ? 'person' : 'person-outline';
           }
           
           return <Ionicons name={iconName} size={size + 4} color={color} />;
@@ -44,7 +44,7 @@ const MainTabs = () => {
     >
       <Tab.Screen name="Dashboard" component={DashboardScreen} />
       <Tab.Screen name="Add Expense" component={AddTransactionScreen} />
-      <Tab.Screen name="Settings" component={SettingsScreen} />
+      <Tab.Screen name="Profile" component={SettingsScreen} />
     </Tab.Navigator>
   );
 };

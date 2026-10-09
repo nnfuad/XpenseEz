@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, StyleSheet, Dimensions, ScrollView, Image } from 'react-native';
+import { View, Text, StyleSheet, Dimensions, ScrollView, Image, TouchableOpacity } from 'react-native';
 import { PieChart, LineChart } from 'react-native-chart-kit';
 import { useStore } from '../store/useStore';
 import { useTheme } from '../hooks/useTheme';
@@ -45,18 +45,34 @@ export const DashboardScreen = () => {
     };
   });
 
-  // Mock line chart data (e.g. over last 6 months or days)
-  const lineData = {
-    labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
-    datasets: [
-      {
-        data: [20, 45, 28, 80, 99, totalExpense > 0 ? totalExpense : 43],
-        color: (opacity = 1) => `rgba(134, 65, 244, ${opacity})`, 
-        strokeWidth: 2,
-      },
-    ],
-    legend: ['Monthly Spending'],
+  const [timeRange, setTimeRange] = React.useState<'Year' | 'Month' | 'Day'>('Month');
+
+  // Generate line chart data based on timeRange
+  const generateLineData = () => {
+    // This is a simplified logic to show the concept. In a real app, 
+    // you'd group the `transactions` array by date.
+    if (timeRange === 'Year') {
+      return {
+        labels: ['Jan', 'Mar', 'May', 'Jul', 'Sep', 'Nov'],
+        datasets: [{ data: [120, 200, 150, 300, 250, totalExpense > 0 ? totalExpense : 100], strokeWidth: 2 }],
+        legend: ['Yearly Spending']
+      };
+    } else if (timeRange === 'Month') {
+      return {
+        labels: ['Week 1', 'Week 2', 'Week 3', 'Week 4'],
+        datasets: [{ data: [50, 90, 40, totalExpense > 0 ? totalExpense : 70], strokeWidth: 2 }],
+        legend: ['Monthly Spending']
+      };
+    } else {
+      return {
+        labels: ['Morning', 'Noon', 'Evening', 'Night'],
+        datasets: [{ data: [10, 25, 15, totalExpense > 0 ? totalExpense : 5], strokeWidth: 2 }],
+        legend: ['Daily Spending']
+      };
+    }
   };
+
+  const lineData = generateLineData();
 
   const { colors, isDark } = useTheme();
 
@@ -84,7 +100,30 @@ export const DashboardScreen = () => {
       </View>
 
       <View style={[styles.chartContainer, { backgroundColor: colors.card }]}>
-        <Text style={[styles.chartTitle, { color: colors.text }]}>Spending Trends</Text>
+        <View style={styles.chartHeader}>
+          <Text style={[styles.chartTitle, { color: colors.text, marginBottom: 0 }]}>Spending Trends</Text>
+          <View style={[styles.toggleGroup, { backgroundColor: colors.background }]}>
+            {['Day', 'Month', 'Year'].map((range) => (
+              <TouchableOpacity
+                key={range}
+                style={[
+                  styles.toggleBtn,
+                  timeRange === range && { backgroundColor: colors.primary }
+                ]}
+                onPress={() => setTimeRange(range as any)}
+              >
+                <Text
+                  style={[
+                    styles.toggleText,
+                    { color: timeRange === range ? '#fff' : colors.textSecondary }
+                  ]}
+                >
+                  {range}
+                </Text>
+              </TouchableOpacity>
+            ))}
+          </View>
+        </View>
         <LineChart
           data={lineData}
           width={screenWidth - 32}
@@ -201,7 +240,27 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: '600',
     marginBottom: 16,
-    alignSelf: 'flex-start',
+  },
+  chartHeader: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    width: '100%',
+    marginBottom: 16,
+  },
+  toggleGroup: {
+    flexDirection: 'row',
+    borderRadius: 8,
+    padding: 2,
+  },
+  toggleBtn: {
+    paddingHorizontal: 10,
+    paddingVertical: 4,
+    borderRadius: 6,
+  },
+  toggleText: {
+    fontSize: 12,
+    fontWeight: '500',
   },
   chartStyle: {
     borderRadius: 12,

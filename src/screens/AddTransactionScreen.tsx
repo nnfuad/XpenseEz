@@ -76,30 +76,39 @@ export const AddTransactionScreen = ({ navigation }: any) => {
         </TouchableOpacity>
       </View>
 
-      <TextInput
-        style={[styles.input, { backgroundColor: colors.card, color: colors.text }]}
-        placeholder="Amount (e.g. 50)"
-        placeholderTextColor={colors.textSecondary}
-        keyboardType="numeric"
-        value={amount}
-        onChangeText={setAmount}
-      />
+      <View style={styles.inputContainer}>
+        <Text style={[styles.inputLabel, { color: colors.textSecondary }]}>Amount</Text>
+        <TextInput
+          style={[styles.input, { backgroundColor: colors.card, color: colors.text, borderColor: colors.border }]}
+          placeholder="e.g. 50"
+          placeholderTextColor={colors.textSecondary}
+          keyboardType="numeric"
+          value={amount}
+          onChangeText={setAmount}
+        />
+      </View>
       
-      <TextInput
-        style={[styles.input, { backgroundColor: colors.card, color: colors.text }]}
-        placeholder="Category (e.g. Food, Salary)"
-        placeholderTextColor={colors.textSecondary}
-        value={category}
-        onChangeText={setCategory}
-      />
+      <View style={styles.inputContainer}>
+        <Text style={[styles.inputLabel, { color: colors.textSecondary }]}>Category</Text>
+        <TextInput
+          style={[styles.input, { backgroundColor: colors.card, color: colors.text, borderColor: colors.border }]}
+          placeholder="e.g. Food, Salary"
+          placeholderTextColor={colors.textSecondary}
+          value={category}
+          onChangeText={setCategory}
+        />
+      </View>
 
-      <TextInput
-        style={[styles.input, { backgroundColor: colors.card, color: colors.text }]}
-        placeholder="Description (Optional)"
-        placeholderTextColor={colors.textSecondary}
-        value={description}
-        onChangeText={setDescription}
-      />
+      <View style={styles.inputContainer}>
+        <Text style={[styles.inputLabel, { color: colors.textSecondary }]}>Description</Text>
+        <TextInput
+          style={[styles.input, { backgroundColor: colors.card, color: colors.text, borderColor: colors.border }]}
+          placeholder="Optional"
+          placeholderTextColor={colors.textSecondary}
+          value={description}
+          onChangeText={setDescription}
+        />
+      </View>
 
       <TouchableOpacity style={[styles.saveBtn, { backgroundColor: colors.primary }]} onPress={handleSave}>
         <Text style={styles.saveBtnText}>Save Transaction</Text>
@@ -111,54 +120,66 @@ export const AddTransactionScreen = ({ navigation }: any) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#121212',
     padding: 20,
   },
   title: {
     fontSize: 28,
     fontWeight: 'bold',
-    color: '#ffffff',
     marginBottom: 30,
     marginTop: 20,
   },
   toggleContainer: {
     flexDirection: 'row',
-    marginBottom: 20,
-    backgroundColor: '#1e1e1e',
-    borderRadius: 8,
-    overflow: 'hidden',
+    marginBottom: 30,
+    borderRadius: 12,
+    padding: 4,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    elevation: 3,
   },
   toggleBtn: {
     flex: 1,
-    paddingVertical: 12,
+    paddingVertical: 14,
     alignItems: 'center',
-  },
-  toggleActiveExpense: {
-    backgroundColor: '#f44336',
-  },
-  toggleActiveIncome: {
-    backgroundColor: '#4caf50',
+    borderRadius: 8,
   },
   toggleText: {
     color: '#fff',
     fontWeight: 'bold',
     fontSize: 16,
   },
+  inputContainer: {
+    marginBottom: 20,
+  },
+  inputLabel: {
+    fontSize: 14,
+    fontWeight: '600',
+    marginBottom: 8,
+  },
   input: {
-    backgroundColor: '#1e1e1e',
-    color: '#fff',
     paddingHorizontal: 16,
-    paddingVertical: 14,
-    borderRadius: 8,
+    paddingVertical: 16,
+    borderRadius: 12,
     fontSize: 16,
-    marginBottom: 16,
+    borderWidth: 1,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.05,
+    shadowRadius: 2,
+    elevation: 2,
   },
   saveBtn: {
-    backgroundColor: '#3b82f6',
-    paddingVertical: 16,
-    borderRadius: 8,
+    paddingVertical: 18,
+    borderRadius: 12,
     alignItems: 'center',
-    marginTop: 10,
+    marginTop: 20,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.2,
+    shadowRadius: 6,
+    elevation: 4,
   },
   saveBtnText: {
     color: '#fff',
